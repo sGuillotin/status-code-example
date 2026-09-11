@@ -34,13 +34,33 @@
   </style>
   
   <script>
-    const handleResponse = (response) => {
+    const handleResponse = async (response) => {
+
+      const content = document.getElementById('content');
+
+      switch(response.status){
+        case 200:
+          content.innerHTML = '<b>Success</b>';
+          break;
+        case 400:
+          content.innerHTML = '<b>Bad request</b>';
+          break;
+        case 404:
+          content.innerHTML = '<b>am teapot not found</b>';
+          break;
+        default:
+          content.innerHTML = '<b>status code not implemented by Client</b>';
+          break;
+      }
+
+      const responseObject = await response.json();
+      content.innerHTML += `<p>${responseObject.message}</p>`;
 
     };
     
-    const sendFetch = (url) => {
-
-      //handleResponse(response);
+    const sendFetch = async (url) => {
+      const response = await fetch(url);
+      handleResponse(response);
     };
 
     const init = () => {
